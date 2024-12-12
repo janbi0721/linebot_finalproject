@@ -39,6 +39,11 @@ git clone https://github.com/janbi0721/linebot_finalproject.git
 git pull
 ```
 
+### 5.資料衝突 解決
+ESC按著
+```git
+:wq
+```
 #########################################
 https://pandeyshikha075.medium.com/building-a-chat-server-and-client-in-python-with-socket-programming-c76de52cc1d5
 ########################################
