@@ -44,6 +44,15 @@ ESC按著
 ```git
 :wq
 ```
+
+### 6.當pull不成功時如何解決 (簡單來說就是兩人同時改)
+```git
+git marge
+git fetch
+```
+git marge 是檢查哪裡不同
+!!注意 git fetch是強制取代
+
 #########################################
 https://pandeyshikha075.medium.com/building-a-chat-server-and-client-in-python-with-socket-programming-c76de52cc1d5
 ########################################
