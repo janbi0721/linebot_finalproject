@@ -26,12 +26,13 @@ git remote add origin https://github.com/janbi0721/20240926.git #後面連結
 ```git
 git add README.md				#丟入暫存區
 git commit -m "first commit"
-git push -u origin main`
+git push -u origin main
 ```
 
 ### 3.將儲存庫下載到本機端
+```git
 git clone https://github.com/janbi0721/linebot_finalproject.git
-
+```
 #########################################
 https://pandeyshikha075.medium.com/building-a-chat-server-and-client-in-python-with-socket-programming-c76de52cc1d5
 ########################################
