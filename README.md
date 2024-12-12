@@ -33,6 +33,12 @@ git push -u origin main
 ```git
 git clone https://github.com/janbi0721/linebot_finalproject.git
 ```
+
+### 4.更新github資料庫 (當我資料是舊版的時候)
+```git
+git pull
+```
+
 #########################################
 https://pandeyshikha075.medium.com/building-a-chat-server-and-client-in-python-with-socket-programming-c76de52cc1d5
 ########################################
