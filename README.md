@@ -5,3 +5,5 @@
 print("hello world")
 
 ```
+## 使用方法 重要
+git clone https://github.com/janbi0721/linebot_finalproject.git
