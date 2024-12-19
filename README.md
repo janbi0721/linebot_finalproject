@@ -25,7 +25,7 @@ git remote add origin https://github.com/janbi0721/20240926.git #後面連結
 
 ```git
 git add .				#丟入暫存區
-git commit -m "first commit"
+git commit -m "你對這個版本的介紹"
 git push -u origin main
 ```
 
