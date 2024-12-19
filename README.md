@@ -24,7 +24,7 @@ git remote add origin https://github.com/janbi0721/20240926.git #後面連結
 ### 2.如何將檔案上傳到github
 
 ```git
-git add README.md				#丟入暫存區
+git add .				#丟入暫存區
 git commit -m "first commit"
 git push -u origin main
 ```
