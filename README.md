@@ -34,6 +34,10 @@ git add .				#丟入暫存區
 git commit -m "你對這個版本的介紹"
 git push -u origin main
 ```
+** 了解下面再幹嘛再用 不要隨便亂用**
+```git
+git add . ; if ($?) { git commit -m "你對這個版本的介紹" } ; if ($?) { git push -u origin main }
+```
 
 ### 3.將儲存庫下載到本機端
 ```git
