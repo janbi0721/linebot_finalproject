@@ -12,13 +12,13 @@
 
 ## GIT 使用指南
 
-### 0.複製資料庫到本地端
+### <mark> 0.複製資料庫到本地端 </mark>
 ```git
 git clone https://github.com/janbi0721/linebot_finalproject.git
 ```
 **注意!! 他會直接在當前目錄下載整個檔案 {包含資料夾本身}**
 
-### 1.建立資料庫 || **警告!!!!! 這個不會再做任何一次 不要再嘗試用了**
+### 1.建立資料庫 || <mark> **警告!!!!! 這個不會再做任何一次 不要再嘗試用了** </mark>
 ```git
 echo "# week30926" >> README.md
 git init
@@ -27,7 +27,7 @@ git config user.name "janbi0721"
 git branch -M main
 git remote add origin https://github.com/janbi0721/20240926.git #後面連結
 ```
-### 2.如何將檔案上傳到github
+### 2.<mark>如何將檔案上傳到github</mark>
 
 ```git
 git add .				#丟入暫存區
@@ -36,7 +36,7 @@ git push -u origin main
 ```
 ** 了解下面再幹嘛再用 不要隨便亂用**
 ```git
-git add . ; if ($?) { git commit -m "你對這個版本的介紹" } ; if ($?) { git push -u origin main }
+git add . ; if ($?) { git commit -m "金正羊羽的md檔版本介紹" } ; if ($?) { git push -u origin main }
 ```
 
 ### 3.將儲存庫下載到本機端
