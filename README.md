@@ -16,6 +16,7 @@
 ```git
 git clone https://github.com/janbi0721/linebot_finalproject.git
 ```
+**注意!! 他會直接在當前目錄下載整個檔案 {包含資料夾本身}**
 
 ### 1.建立資料庫 || **警告!!!!! 這個不會再做任何一次 不要再嘗試用了**
 ```git
