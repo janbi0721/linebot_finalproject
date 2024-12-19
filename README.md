@@ -27,7 +27,7 @@ git config user.name "janbi0721"
 git branch -M main
 git remote add origin https://github.com/janbi0721/20240926.git #後面連結
 ```
-### 2.如何將檔案上傳到github
+### 2.<mark>如何將檔案上傳到github</mark>
 
 ```git
 git add .				#丟入暫存區
