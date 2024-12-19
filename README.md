@@ -6,13 +6,18 @@
 ![alt text](image.png)
 
 ## 使用方法 重要
-git clone https://github.com/janbi0721/linebot_finalproject.git
+
 
 @所有人
 
 ## GIT 使用指南
 
-### 1.建立資料庫
+### 0.複製資料庫到本地端
+```git
+git clone https://github.com/janbi0721/linebot_finalproject.git
+```
+
+### 1.建立資料庫 *警告 這個不會再做任何一次 不要再嘗試用了*
 ```git
 echo "# week30926" >> README.md
 git init
