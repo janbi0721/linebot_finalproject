@@ -34,6 +34,10 @@ git add .				#丟入暫存區
 git commit -m "你對這個版本的介紹"
 git push -u origin main
 ```
+** 了解下面再幹嘛再用 不要隨便亂用**
+```git
+git add . ; if ($?) { git commit -m "你對這個版本的介紹" } ; if ($?) { git push -u origin main }
+```
 
 ### 3.將儲存庫下載到本機端
 ```git
@@ -59,8 +63,8 @@ git fetch
 git marge 是檢查哪裡不同
 !!注意 git fetch是強制取代
 
-#########################################
+#########################################<br>
 https://pandeyshikha075.medium.com/building-a-chat-server-and-client-in-python-with-socket-programming-c76de52cc1d5
-########################################
+########################################<br>
 複製到本地端
 git clone 儲存庫 #遠端儲存網址
