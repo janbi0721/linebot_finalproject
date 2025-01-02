@@ -35,7 +35,7 @@ git push -u origin main
 ```
 ** 了解下面再幹嘛再用 不要隨便亂用**
 ```git
-git add . ; if ($?) { git commit -m "金正羊羽的md檔版本介紹" } ; if ($?) { git push -u origin main }
+git add . ; if ($?) { git commit -m "金正羊羽的md檔版20250102" } ; if ($?) { git push -u origin main }
 ```
 
 ### 3.將儲存庫下載到本機端
