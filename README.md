@@ -2,7 +2,7 @@
 # LINE療心
 目標 利用line讓人每天記錄日記 並利用openai or gemini2.0檢測情緒 並且生成每周分析報告
 
-# 诶不是 哥們  
+# 诶不是 哥們  帥哥
 ![alt text](image.png)
 
 ## 使用方法 重要
