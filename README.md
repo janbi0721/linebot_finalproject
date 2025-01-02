@@ -56,10 +56,10 @@ ESC按著
 
 ### 6.當pull不成功時如何解決 (簡單來說就是兩人同時改)
 ```git
-git marge
+git merge
 git fetch
 ```
-git marge 是檢查哪裡不同
+git merge 是檢查哪裡不同
 !!注意 git fetch是強制取代
 
 #########################################<br>
