@@ -9,11 +9,15 @@ from linebot.models import (
 )
 import os
 from dotenv import load_dotenv
-
+import logging
 
 load_dotenv()
 
 app = Flask(__name__)
+
+# 設置日誌記錄 - 新增 
+logging.basicConfig(level=logging.INFO) 
+logger = logging.getLogger(__name__)
 
 # LINE Bot 的 Channel Access Token 和 Channel Secret
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
@@ -84,9 +88,12 @@ def create_richmenu():
         # 啟用 Rich Menu
         line_bot_api.set_default_rich_menu(rich_menu_id)
 
+        logger.info("Rich Menu 建立成功！") # 新增: 日誌記錄
+
         return "Rich Menu 建立成功！", 200
 
     except Exception as e:
+        logger.error(f"建立 Rich Menu 時發生錯誤: {str(e)}") # 新增: 日誌記錄
         return f"建立 Rich Menu 時發生錯誤: {str(e)}", 500
 
 
