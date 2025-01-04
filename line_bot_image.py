@@ -52,6 +52,11 @@ def handle_message(event):
 def create_richmenu():
     """建立 Rich Menu"""
     try:
+        # 刪除現有的 Rich Menu
+        rich_menu_list = line_bot_api.get_rich_menu_list()
+        for rich_menu in rich_menu_list:
+            line_bot_api.delete_rich_menu(rich_menu.rich_menu_id)
+
         # 定義 Rich Menu 的結構
         rich_menu = RichMenu(
             size={"width": 2500, "height": 1686},  # Rich Menu 的尺寸
@@ -61,19 +66,19 @@ def create_richmenu():
             areas=[
                 RichMenuArea(
                     bounds=RichMenuBounds(x=0, y=0, width=1250, height=843),
-                    action=MessageAction(label="聊天", text="聊天")
+                    action=MessageAction(label="紀錄今日心情", text="紀錄今日心情")
                 ),
                 RichMenuArea(
                     bounds=RichMenuBounds(x=1250, y=0, width=1250, height=843),
-                    action=MessageAction(label="紀錄", text="紀錄")
+                    action=MessageAction(label="紀錄今日日記", text="紀錄今日日記")
                 ),
                 RichMenuArea(
                     bounds=RichMenuBounds(x=0, y=843, width=1250, height=843),
-                    action=MessageAction(label="紀錄睡眠時間", text="紀錄睡眠時間")
+                    action=MessageAction(label="紀錄睡眠情況", text="紀錄睡眠情況")
                 ),
                 RichMenuArea(
                     bounds=RichMenuBounds(x=1250, y=843, width=1250, height=843),
-                    action=MessageAction(label="產生分析圖表", text="產生分析圖表")
+                    action=MessageAction(label="分析圖表", text="分析圖表")
                 ),
             ]
         )
@@ -81,20 +86,20 @@ def create_richmenu():
         # 建立 Rich Menu
         rich_menu_id = line_bot_api.create_rich_menu(rich_menu)
 
-        # 上傳 Rich Menu 圖片
-        with open("richmenu.png", "rb") as f:  # 確保 richmenu.png 是你的圖片檔
+        # 上傳新的 Rich Menu 圖片
+        with open("new_richmenu.png", "rb") as f:  # 確保 new_richmenu.png 是你的新圖片檔
             line_bot_api.set_rich_menu_image(rich_menu_id, "image/png", f)
 
-        # 啟用 Rich Menu
+        # 啟用新的 Rich Menu
         line_bot_api.set_default_rich_menu(rich_menu_id)
 
-        logger.info("Rich Menu 建立成功！") # 新增: 日誌記錄
+        logger.info("Rich Menu 更新成功！")  # 新增: 日誌記錄
 
-        return "Rich Menu 建立成功！", 200
+        return "Rich Menu 更新成功！", 200
 
     except Exception as e:
-        logger.error(f"建立 Rich Menu 時發生錯誤: {str(e)}") # 新增: 日誌記錄
-        return f"建立 Rich Menu 時發生錯誤: {str(e)}", 500
+        logger.error(f"更新 Rich Menu 時發生錯誤: {str(e)}")  # 新增: 日誌記錄
+        return f"更新 Rich Menu 時發生錯誤: {str(e)}", 500
 
 
 if __name__ == "__main__":
