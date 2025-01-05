@@ -1,5 +1,4 @@
-#各位 這是程式碼測試區
-#請在這裡測試你的程式碼
+#注意 如果要用RICH MENU 要去另一個終端打 curl -X POST http://localhost:5000/create_richmenu
 from flask import Flask, request, abort
 from linebot.v3 import (
     WebhookHandler
@@ -64,18 +63,24 @@ def handle_message(event):
         user_id = event.source.user_id  # 取得用戶 ID
         print(behavior)
         if behavior == "紀錄今日心情":
-            # record_data.record_mood(user_id, int(event.message.text))
-            send_message("心情紀錄完成！")
-            behavior = ""
+            if (event.message.text.strip()).isdigit() == False or int(event.message.text) < 1 or int(event.message.text) > 10:
+                send_message("請輸入1-10的數字(數字1-10)越高越開心")
+            else:
+                record_data.record_mood(user_id, int(event.message.text))
+                send_message("心情紀錄完成！")
+                behavior = ""
         elif behavior == "紀錄今日日記":
-            # record_data.record_diary(user_id, event.message.text)
+            record_data.record_diary(user_id, event.message.text)
             send_message("日記紀錄完成！")
             behavior = ""
         elif behavior == "紀錄睡眠情況":
-            # record_data.record_sleep(user_id, int(event.message.text))
+            if (event.message.text.strip()).isdigit() == False or int(event.message.text) < 0 or int(event.message.text) > 24:
+                send_message("請輸入數字(單位:小時)")
+            record_data.record_sleep(user_id, int(event.message.text))
             send_message("睡眠紀錄完成！")
             behavior = ""
         elif behavior == "產生分析圖表":
+            #放你生成圖表的函數
             send_message("分析圖表")
             behavior = ""
         else:
