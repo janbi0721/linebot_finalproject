@@ -57,11 +57,19 @@ def record_diary(user_id, entry):
     data[user_id]["diaries"].append({"date": today, "entry": entry})
     save_user_data(data)
 
-#紀錄睡眠時間
+# 紀錄睡眠時間（同一天覆蓋舊資料）
 def record_sleep(user_id, hours):
     data = load_user_data()
     if user_id not in data:
         data[user_id] = {"moods": [], "diaries": [], "sleep": []}
     today = datetime.now().strftime("%Y-%m-%d")
-    data[user_id]["sleep"].append({"date": today, "hours": hours})
+    found = False
+    for sleep_entry in data[user_id]["sleep"]:
+        if sleep_entry["date"] == today:
+            sleep_entry["hours"] = hours
+            found = True
+            break
+    if not found:
+        data[user_id]["sleep"].append({"date": today, "hours": hours})
     save_user_data(data)
+

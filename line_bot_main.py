@@ -64,7 +64,7 @@ def handle_message(event):
         print(behavior)
         if behavior == "紀錄今日心情":
             if (event.message.text.strip()).isdigit() == False or int(event.message.text) < 1 or int(event.message.text) > 10:
-                send_message("請輸入1-10的數字(數字1-10)越高越開心")
+                send_message("輸入錯誤 請輸入1-10的數字(數字1-10)越高越開心")
             else:
                 record_data.record_mood(user_id, int(event.message.text))
                 send_message("心情紀錄完成！")
@@ -75,7 +75,7 @@ def handle_message(event):
             behavior = ""
         elif behavior == "紀錄睡眠情況":
             if (event.message.text.strip()).isdigit() == False or int(event.message.text) < 0 or int(event.message.text) > 24:
-                send_message("請輸入數字(單位:小時)")
+                send_message("輸入錯誤 請輸入數字(單位:小時)")
             record_data.record_sleep(user_id, int(event.message.text))
             send_message("睡眠紀錄完成！")
             behavior = ""
@@ -94,8 +94,8 @@ def handle_message(event):
                 behavior = "紀錄睡眠情況"
                 send_message("請輸入你的睡眠時間(單位:小時)")
             elif event.message.text == "產生分析圖表":
-                behavior = "紀錄睡眠情況"
-                send_message("請輸入你的睡眠時間(單位:小時)")
+                behavior = "產生分析圖表"
+                send_message("圖表生成中..請稍後")
             else:
                 reply_message = mygo_talking.talking(event.message.text)
                 create_MessagingApi  = MessagingApi(api_client)
