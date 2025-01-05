@@ -55,7 +55,7 @@ def record_diary(user_id, entry):
         data[user_id] = {"moods": [], "diaries": [], "sleep": []}
     today = datetime.now().strftime("%Y-%m-%d")
     data[user_id]["diaries"].append({"date": today, "entry": entry})
-    save_user_data(data)
+    save_user_data(data)  
 
 # 紀錄睡眠時間（同一天覆蓋舊資料）
 def record_sleep(user_id, hours):

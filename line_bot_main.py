@@ -61,7 +61,7 @@ def handle_message(event):
     with ApiClient(line_bot_api) as api_client:
         get_message = event.message.text.strip()
         user_id = event.source.user_id  # 取得用戶 ID
-        print(behavior)
+        print(behavior)#################################################讓AI回應用戶
         if behavior == "紀錄今日心情":
             if (event.message.text.strip()).isdigit() == False or int(event.message.text) < 1 or int(event.message.text) > 10:
                 send_message("輸入錯誤 請輸入1-10的數字(數字1-10)越高越開心")
@@ -74,11 +74,16 @@ def handle_message(event):
             send_message("日記紀錄完成！")
             behavior = ""
         elif behavior == "紀錄睡眠情況":
-            if (event.message.text.strip()).isdigit() == False or int(event.message.text) < 0 or int(event.message.text) > 24:
+            try:
+                sleep_hours = round(float(event.message.text.strip()), 1)
+                if sleep_hours < 0 or sleep_hours > 24:
+                    send_message("輸入錯誤 請輸入數字(單位:小時)")
+                else:
+                    record_data.record_sleep(user_id, sleep_hours)
+                    send_message("睡眠紀錄完成！")
+                    behavior = ""
+            except ValueError:
                 send_message("輸入錯誤 請輸入數字(單位:小時)")
-            record_data.record_sleep(user_id, int(event.message.text))
-            send_message("睡眠紀錄完成！")
-            behavior = ""
         elif behavior == "產生分析圖表":
             #放你生成圖表的函數
             send_message("分析圖表")
