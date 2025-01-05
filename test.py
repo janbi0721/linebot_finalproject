@@ -1,20 +1,103 @@
-from google import genai
-from dotenv import load_dotenv
+#注意 如果要用RICH MENU 要去另一個終端打 curl -X POST http://localhost:5000/create_richmenu
+from flask import Flask, request, abort,send_from_directory 
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import (
+    MessageEvent, TextMessage, TextSendMessage,
+    QuickReply, QuickReplyButton, MessageAction,
+    FlexSendMessage,RichMenu,RichMenuBounds,RichMenuArea,URIAction,ImageSendMessage
+)
 import os
+from dotenv import load_dotenv
+import mygo_talking
+
 load_dotenv()
-image_folder = "Mygo圖包"
-image_files = [file for file in os.listdir(image_folder) if file.lower().endswith(('.jpg', '.jpeg', '.png', '.gif'))]
 
-client = genai.Client(
-    api_key=os.getenv('GEMINI_API_KEY')
-)
-response = client.models.generate_content(
-    model='gemini-2.0-flash-exp', contents=f"""
-        這是我回答的句子列表{image_files} 
-        這是我的回答:你是gay嗎
-        請幫我選擇一句比較合理的句子 
-        只需要一句 回答應該要長得像以下 不要.jpg
-    """
-)
-print(response.text)
+app = Flask(__name__)
 
+# LINE Bot 的 Channel Access Token 和 Channel Secret
+line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
+handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
+ngrok_url = os.getenv('NGROK_URL')
+
+@app.route("/callback", methods=['POST'])
+def callback():
+    # 確認請求來自 LINE 平台
+    signature = request.headers['X-Line-Signature']
+    body = request.get_data(as_text=True)
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        app.logger.error("無效的簽名。請檢查 CHANNEL_SECRET 是否正確")
+        abort(400)
+    except Exception as e:
+        app.logger.error(f"處理訊息時發生錯誤: {e}")
+        abort(500)
+    return 'OK'
+
+#對方回傳訊息就跟他聊天
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    # 原本的回應邏輯
+    user_message = event.message.text.strip()
+    get_message = mygo_talking.mygo_talking(user_message)
+    image_message = ImageSendMessage(
+        original_content_url=f"{ngrok_url}/Mygo/{get_message}".strip(),
+        preview_image_url=f"{ngrok_url}/Mygo/{get_message}".strip()
+    )
+    print(f"{ngrok_url}/Mygo/{get_message}")
+    line_bot_api.push_message(event.reply_token, [image_message])
+
+
+@app.route("/create_richmenu", methods=['POST'])
+def create_richmenu():
+    """建立 Rich Menu"""
+    try:
+        # 定義 Rich Menu 的結構
+        rich_menu = RichMenu(
+            size={"width": 2500, "height": 1686},  # Rich Menu 的尺寸
+            selected=True,
+            name="Rich Menu 1",
+            chat_bar_text="主選單",  # 聊天室底部顯示的按鈕文字
+            areas=[
+                RichMenuArea(
+                    bounds=RichMenuBounds(x=0, y=0, width=1250, height=843),
+                    action=MessageAction(label="聊天", text="聊天")
+                ),
+                RichMenuArea(
+                    bounds=RichMenuBounds(x=1250, y=0, width=1250, height=843),
+                    action=MessageAction(label="紀錄", text="紀錄")
+                ),
+                RichMenuArea(
+                    bounds=RichMenuBounds(x=0, y=843, width=1250, height=843),
+                    action=MessageAction(label="紀錄睡眠時間", text="紀錄睡眠時間")
+                ),
+                RichMenuArea(
+                    bounds=RichMenuBounds(x=1250, y=843, width=1250, height=843),
+                    action=MessageAction(label="產生分析圖表", text="產生分析圖表")
+                ),
+            ]
+        )
+
+        # 建立 Rich Menu
+        rich_menu_id = line_bot_api.create_rich_menu(rich_menu)
+
+        # 上傳 Rich Menu 圖片
+        with open("richmenu.png", "rb") as f:  # 確保 richmenu.png 是你的圖片檔
+            line_bot_api.set_rich_menu_image(rich_menu_id, "image/png", f)
+
+        # 啟用 Rich Menu
+        line_bot_api.set_default_rich_menu(rich_menu_id)
+
+        return "Rich Menu 建立成功！", 200
+
+    except Exception as e:
+        return f"建立 Rich Menu 時發生錯誤: {str(e)}", 500
+
+@app.route('/Mygo/<path:filename>')
+def serve_mygo(filename):
+    return send_from_directory('Mygo', filename, mimetype='image/jpeg')
+
+
+if __name__ == "__main__":
+    app.run(port=5000)
