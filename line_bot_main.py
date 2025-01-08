@@ -78,7 +78,7 @@ def handle_message(event):
             )
         get_message = event.message.text.strip()
         user_id = event.source.user_id  # 取得用戶 ID
-        print(behavior)#################################################讓AI回應用戶
+        print(behavior)
         #心理諮商模式
         if consultation_model == True:
             if event.message.text == "結束心理諮商模式":
