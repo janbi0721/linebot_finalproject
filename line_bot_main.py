@@ -127,7 +127,7 @@ def handle_message(event):
                 send_message("請輸入你的心情(數字1-10)越高越開心")
             elif get_message == "讀寫今日日記" :
                 behavior = "讀寫今日日記"
-                send_message("輸入'讀 20XX-XX-XX'查看日記 日期請填入你要看的天數，輸入'寫'寫入日記")
+                send_message("輸入'讀 20XX-XX-XX'查看日記 日期請填入你要看的那天，輸入'寫'寫入日記")
             elif get_message == "紀錄睡眠情況" or get_message == "記錄睡眠情況":
                 behavior = "紀錄睡眠情況"
                 send_message("請輸入你的睡眠時間(單位:小時)")
