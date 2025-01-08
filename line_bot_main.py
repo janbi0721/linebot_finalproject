@@ -85,7 +85,7 @@ def handle_message(event):
                 consultation_model = False
                 talking.stoptalk()
                 send_message("已結束心理諮商模式")
-            elif event.message.text == "紀錄今日心情" or event.message.text == "紀錄今日日記" or event.message.text == "紀錄睡眠情況" or event.message.text == "產生分析圖表":
+            elif event.message.text == "心理諮商模式" or event.message.text == "紀錄今日心情" or event.message.text == "讀寫今日日記" or event.message.text == "紀錄睡眠情況" or event.message.text == "產生分析圖表":
                 send_message("請先結束心理諮商模式")
             else:
                 reply_message = talking.talk(event.message.text, user_id)
@@ -101,15 +101,21 @@ def handle_message(event):
             if read_or_write == "寫":
                 record_data.record_diary(user_id, event.message.text)
                 send_message("日記紀錄完成！")
+                behavior = ""
+                read_or_write = ""
             elif event.message.text == "寫":
                 read_or_write = "寫"
                 send_message("請輸入你的日記")
             elif event.message.text.strip(" ")[0] in "讀":
-                text1 = load_journal.load_journal(int(event.message.text.strip(" ")[1]), user_id)
-            behavior = ""
+                message = event.message.text.strip(" ")
+                text1 = load_journal.load_journal(event.message.text.split(" ")[1], user_id)
+                print(text1,event.message.text.split(" "))
+                send_message(text1)
+                behavior = ""
         elif behavior == "紀錄睡眠情況":
             sleep_hours = round(float(event.message.text.strip()), 1)
-            if sleep_hours < 0 or sleep_hours > 24 or sleep_hours.is_integer() == False:
+
+            if sleep_hours < 0 or sleep_hours > 24:
                 send_message("輸入錯誤 請輸入數字(單位:小時)")
             else:
                 record_data.record_sleep(user_id, sleep_hours)
@@ -121,7 +127,7 @@ def handle_message(event):
                 send_message("請輸入你的心情(數字1-10)越高越開心")
             elif get_message == "讀寫今日日記" :
                 behavior = "讀寫今日日記"
-                send_message("輸入'讀 日期'查看日記 日期請填入你要看的天數，輸入'寫'寫入日記")
+                send_message("輸入'讀 20XX-XX-XX'查看日記 日期請填入你要看的天數，輸入'寫'寫入日記")
             elif get_message == "紀錄睡眠情況" or get_message == "記錄睡眠情況":
                 behavior = "紀錄睡眠情況"
                 send_message("請輸入你的睡眠時間(單位:小時)")
@@ -131,6 +137,7 @@ def handle_message(event):
             elif event.message.text == "產生分析圖表":
                 send_message("正在產生分析圖表，請稍後...")
                 analysis_data = Create_analysis_eports.make_charts(user_id)
+                print(f"{ngrok_url}/analysis_report/{user_id}_analysis_report.png")
                 # print(f"{ngrok_url}/analysis_report/{user_id}_analysis_report.png")
                 # 使用 Push Message 發送圖表及結果
                 Details_text = f"平均睡眠時數: {analysis_data['平均睡眠時數']} 小時\n平均心情指數: {analysis_data['平均心情指數']}\n心情最差的日子: {analysis_data['心情最差的日子']}\n心情最好的日子: {analysis_data['心情最好的日子']}\n睡眠最少的日子: {analysis_data['睡眠最少的日子']}\n睡眠最多的日子: {analysis_data['睡眠最多的日子']}"
