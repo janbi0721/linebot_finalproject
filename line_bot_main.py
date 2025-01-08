@@ -98,8 +98,14 @@ def handle_message(event):
                 send_message("心情紀錄完成！")
                 behavior = ""
         elif behavior == "讀寫今日日記":
-            record_data.record_diary(user_id, event.message.text)
-            send_message("日記紀錄完成！")
+            if read_or_write == "寫":
+                record_data.record_diary(user_id, event.message.text)
+                send_message("日記紀錄完成！")
+            elif event.message.text == "寫":
+                read_or_write = "寫"
+                send_message("請輸入你的日記")
+            elif event.message.text.strip(" ")[0] in "讀":
+                text1 = load_journal.load_journal(int(event.message.text.strip(" ")[1]), user_id)
             behavior = ""
         elif behavior == "紀錄睡眠情況":
             sleep_hours = round(float(event.message.text.strip()), 1)
@@ -113,9 +119,9 @@ def handle_message(event):
             if get_message == "紀錄今日心情" or get_message == "記錄今日心情":
                 behavior = "紀錄今日心情"
                 send_message("請輸入你的心情(數字1-10)越高越開心")
-            elif get_message == "讀寫今日日記" or get_message == "讀寫今日日記":
+            elif get_message == "讀寫今日日記" :
                 behavior = "讀寫今日日記"
-                send_message("請輸入你的日記")
+                send_message("輸入'讀 日期'查看日記 日期請填入你要看的天數，輸入'寫'寫入日記")
             elif get_message == "紀錄睡眠情況" or get_message == "記錄睡眠情況":
                 behavior = "紀錄睡眠情況"
                 send_message("請輸入你的睡眠時間(單位:小時)")
