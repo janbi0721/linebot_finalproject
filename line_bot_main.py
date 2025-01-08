@@ -26,6 +26,7 @@ from dotenv import load_dotenv
 import mygo_talking
 import record_data
 import Create_analysis_eports
+import talking
 load_dotenv()
 
 app = Flask(__name__)
@@ -36,6 +37,7 @@ handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
 #行為預載
 behavior = ""
+consultation_model = False
 
 #ngrok網址
 ngrok_url = os.getenv('NGROK_URL')
@@ -58,9 +60,10 @@ def serve_image(filename):
     return send_from_directory('analysis_report', filename)
 
 #接收到文字訊息時的行為
+
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
-    global behavior
+    global behavior, consultation_model
     with ApiClient(line_bot_api) as api_client:
         #回覆簡單文字用函數
         def send_message(message):
@@ -74,7 +77,18 @@ def handle_message(event):
         get_message = event.message.text.strip()
         user_id = event.source.user_id  # 取得用戶 ID
         print(behavior)#################################################讓AI回應用戶
-        if behavior == "紀錄今日心情":
+        #心理諮商模式
+        if consultation_model == True:
+            if event.message.text == "結束心理諮商模式":
+                consultation_model = False
+                talking.stoptalk()
+                send_message("已結束心理諮商模式")
+            elif event.message.text == "紀錄今日心情" or event.message.text == "紀錄今日日記" or event.message.text == "紀錄睡眠情況" or event.message.text == "產生分析圖表":
+                send_message("請先結束心理諮商模式")
+            else:
+                reply_message = talking.talk(event.message.text, user_id)
+                send_message(reply_message)
+        elif behavior == "紀錄今日心情":
             if (event.message.text.strip()).isdigit() == False or int(event.message.text) < 1 or int(event.message.text) > 10:
                 send_message("輸入錯誤 請輸入1-10的數字(數字1-10)越高越開心")
             else:
@@ -103,6 +117,9 @@ def handle_message(event):
             elif get_message == "紀錄睡眠情況" or get_message == "記錄睡眠情況":
                 behavior = "紀錄睡眠情況"
                 send_message("請輸入你的睡眠時間(單位:小時)")
+            elif get_message == "心理諮商模式":
+                consultation_model = True
+                send_message("已開啟心理諮商模式")
             elif event.message.text == "產生分析圖表":
                 send_message("正在產生分析圖表，請稍後...")
                 analysis_data = Create_analysis_eports.make_charts(user_id)
@@ -122,7 +139,8 @@ def handle_message(event):
                         ]
                     )
                 )
-                
+            elif event.message.text == "結束心理諮商模式":
+                send_message("目前並未開啟心理諮商模式")
             else:
                 reply_message = mygo_talking.talking(event.message.text)
                 create_MessagingApi  = MessagingApi(api_client)

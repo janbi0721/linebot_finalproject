@@ -3,12 +3,29 @@ import PIL
 from dotenv import load_dotenv
 import os
 import time
-
+import json 
+import requests
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 generativeai.configure(api_key=api_key)
 
-def talk(input):
+def send_loading(chat_id, loading_seconds):
+    """發送打字中動畫請求"""
+    url = "https://api.line.me/v2/bot/chat/loading/start"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {os.getenv('CHANNEL_ACCESS_TOKEN')}"
+    }
+    data = {
+        "chatId": chat_id,
+        "loadingSeconds": loading_seconds
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    if response.status_code != 200:
+        print(f"Failed to send loading animation: {response.status_code}, {response.text}")
+
+def talk(input, chat_id):
+    send_loading(chat_id, 60)
     with open("history.txt", "r+", encoding="utf-8") as f:
         history = f.read()
     model = generativeai.GenerativeModel("gemini-2.0-flash-exp")
@@ -36,4 +53,7 @@ def talk(input):
     print(resp.text)
     return resp.text
 
-talk("我想要殺人") # 這是使用者的問題
+def stoptalk():
+    with open("history.txt", "w", encoding="utf-8") as f:
+        f.write("")
+
