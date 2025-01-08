@@ -38,6 +38,7 @@ handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 #行為預載
 behavior = ""
 consultation_model = False
+read_or_write = ""
 
 #ngrok網址
 ngrok_url = os.getenv('NGROK_URL')
@@ -63,7 +64,7 @@ def serve_image(filename):
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
-    global behavior, consultation_model
+    global behavior, consultation_model, read_or_write
     with ApiClient(line_bot_api) as api_client:
         #回覆簡單文字用函數
         def send_message(message):
@@ -95,7 +96,7 @@ def handle_message(event):
                 record_data.record_mood(user_id, int(event.message.text))
                 send_message("心情紀錄完成！")
                 behavior = ""
-        elif behavior == "紀錄今日日記":
+        elif behavior == "讀寫今日日記":
             record_data.record_diary(user_id, event.message.text)
             send_message("日記紀錄完成！")
             behavior = ""
@@ -111,8 +112,8 @@ def handle_message(event):
             if get_message == "紀錄今日心情" or get_message == "記錄今日心情":
                 behavior = "紀錄今日心情"
                 send_message("請輸入你的心情(數字1-10)越高越開心")
-            elif get_message == "紀錄今日日記" or get_message == "記錄今日日記":
-                behavior = "紀錄今日日記"
+            elif get_message == "讀寫今日日記" or get_message == "讀寫今日日記":
+                behavior = "讀寫今日日記"
                 send_message("請輸入你的日記")
             elif get_message == "紀錄睡眠情況" or get_message == "記錄睡眠情況":
                 behavior = "紀錄睡眠情況"
