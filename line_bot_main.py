@@ -27,6 +27,7 @@ import mygo_talking
 import record_data
 import Create_analysis_eports
 import talking
+import load_journal
 load_dotenv()
 
 app = Flask(__name__)
