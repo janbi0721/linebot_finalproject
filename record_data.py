@@ -49,13 +49,22 @@ def record_mood(user_id, mood):
     save_user_data(data)
 
 #紀錄日記
+# 紀錄日記
 def record_diary(user_id, entry):
-    data = load_user_data()
+    data = load_user_data()  # 載入現有的用戶資料
     if user_id not in data:
         data[user_id] = {"moods": [], "diaries": [], "sleep": []}
     today = datetime.now().strftime("%Y-%m-%d")
-    data[user_id]["diaries"].append({"date": today, "entry": entry})
-    save_user_data(data)  
+    # 檢查當天是否已有日記
+    for diary in data[user_id]["diaries"]:
+        if diary["date"] == today:
+            # 覆蓋當天的日記
+            diary["entry"] = entry
+            break
+    else:
+        # 如果沒有當天的日記，新增一條新的日記
+        data[user_id]["diaries"].append({"date": today, "entry": entry})
+    save_user_data(data)
 
 # 紀錄睡眠時間（同一天覆蓋舊資料）
 def record_sleep(user_id, hours):
