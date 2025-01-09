@@ -30,7 +30,7 @@ def make_charts(userid):
     # 圖二：睡眠時間
     plt.subplot(2, 1, 2)
     plt.xticks(rotation=45)
-    plt.ylim(0, 10)
+    plt.ylim(0, 24)
     plt.xlabel('日期')
     plt.ylabel('睡眠時間 (小時)')
     plt.title('每日睡眠時間')
